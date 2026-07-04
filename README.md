@@ -102,6 +102,7 @@ Sections are just notes — add or remove them freely. The hooks are not tied to
 
 ## Customization
 
+- **Rename "obsidian"** To rename the `.claude/docs/obsidian` folder, you also need to change the `DOCS=".claude/docs/obsidian"` parameter in each of the hooks
 - **Too noisy?** The Stop hook fires once per turn that changed source files. To relax it, edit `obsidian-docs-stop.sh` — e.g. exit 0 unless the changed list contains certain paths.
 - **Different vault location?** Change the `DOCS` variable at the top of all three scripts and the paths in `INDEX.md`.
 - **More sections?** Add a note, link it from `INDEX.md`. The hooks don't care about section names.
