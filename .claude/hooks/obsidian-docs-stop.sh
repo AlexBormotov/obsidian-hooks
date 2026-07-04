@@ -21,6 +21,6 @@ files=$(sort -u "$CHANGED" 2>/dev/null | head -20 | tr '\n' ' ' | tr -d '"')
 rm -f "$MARKER" "$CHANGED"
 
 cat <<EOF
-{"decision":"block","reason":"DOCUMENTATION UPDATE REQUIRED. Source files changed this turn: $files. Update the Obsidian docs vault at .claude/docs/obsidian/ now: (1) for each new or changed file, create or update its note in code-map/<area>/ (e.g. code-map/backend/app-api-v1-auth.md) describing the file's purpose and every class/function/method (signature + one-line description), linking related notes with [[wikilinks]]; (2) update the relevant section note (Backend/Frontend/etc.) so the new note is reachable from it; (3) add an entry to Timeline.md (date + what was done). If the changes were not code (config, scripts, docs), a Timeline.md entry is enough. Then finish your reply."}
+{"decision":"block","reason":"DOCUMENTATION UPDATE REQUIRED. Source files changed this turn: $files. Update the Obsidian docs vault at $DOCS/ now: (1) for each new or changed file, create or update its note in code-map/<area>/ (e.g. code-map/backend/app-api-v1-auth.md) describing the file's purpose and every class/function/method (signature + one-line description), linking related notes with [[wikilinks]]; (2) update the relevant section note (Backend/Frontend/etc.) so the new note is reachable from it; (3) add an entry to Timeline.md (date + what was done). If the changes were not code (config, scripts, docs), a Timeline.md entry is enough. Then finish your reply."}
 EOF
 exit 0
