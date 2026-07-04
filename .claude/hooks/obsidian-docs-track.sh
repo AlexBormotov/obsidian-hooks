@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
 # PostToolUse hook (Write|Edit|NotebookEdit): record that source files changed this turn.
 # The Stop hook later uses this marker to demand a documentation update.
-# Portable: no jq, relative paths only; silently no-ops if the vault is absent.
+# Portable: no jq; silently no-ops if the vault is absent.
+# Hooks inherit Claude's *current* cwd (can change mid-session) -> anchor to project root.
+cd "${CLAUDE_PROJECT_DIR:-$(dirname "$0")/../..}" 2>/dev/null || exit 0
 DOCS=".claude/docs/obsidian"
 [ -d "$DOCS" ] || exit 0
 

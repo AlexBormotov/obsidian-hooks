@@ -2,7 +2,9 @@
 # Stop hook: if source files changed this turn, block the stop once and tell Claude
 # to update the Obsidian docs vault (code map + timeline). Guarded against loops via
 # stop_hook_active and by clearing the marker before blocking.
-# Portable: no jq, relative paths only; silently no-ops if the vault is absent.
+# Portable: no jq; silently no-ops if the vault is absent.
+# Hooks inherit Claude's *current* cwd (can change mid-session) -> anchor to project root.
+cd "${CLAUDE_PROJECT_DIR:-$(dirname "$0")/../..}" 2>/dev/null || exit 0
 DOCS=".claude/docs/obsidian"
 MARKER="$DOCS/.pending-changes"
 CHANGED="$DOCS/.changed-files"

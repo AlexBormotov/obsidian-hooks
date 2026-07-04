@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 # SessionStart hook: inject the Obsidian docs hub into Claude's context.
-# Portable: relies only on cwd == project root; silently no-ops if the vault is absent.
+# Portable: silently no-ops if the vault is absent.
+# Hooks inherit Claude's *current* cwd (can change mid-session) -> anchor to project root.
+cd "${CLAUDE_PROJECT_DIR:-$(dirname "$0")/../..}" 2>/dev/null || exit 0
 DOCS=".claude/docs/obsidian"
 [ -f "$DOCS/INDEX.md" ] || exit 0
 
