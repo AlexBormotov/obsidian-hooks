@@ -30,20 +30,44 @@ The result: a living documentation graph. Open `.claude/docs/obsidian/` as an Ob
             └── frontend/
 ```
 
-## Installation
-
-1. Copy the `.claude/` directory into your project root.
-2. If your project already has `.claude/settings.json`, merge the `"hooks"` block from this template into it instead of overwriting.
-3. Restart Claude Code (or run `/hooks` once) so it picks up the new hooks.
-4. Open `.claude/docs/obsidian/` as a vault in Obsidian (File → Open folder as vault).
-
-That's it. No per-project configuration: the scripts use only relative paths and plain bash (no `jq` or other dependencies). If the vault directory is missing, all three hooks silently do nothing — safe to keep in projects that don't use it.
-
 ## Requirements
 
-- Claude Code CLI
-- `bash` available on PATH (on Windows: Git Bash, installed with Git for Windows)
-- Obsidian (optional — only for viewing the graph; the vault is plain Markdown)
+- **Claude Code CLI** — [installation guide](https://docs.claude.com/en/docs/claude-code/setup)
+- **bash** on PATH — the only real dependency:
+  - **Linux / macOS:** already installed, nothing to do.
+  - **Windows:** install [Git for Windows](https://git-scm.com/download/win) — it bundles Git Bash, and Claude Code uses it to run hook commands. Verify from any terminal: `bash --version`.
+- **Obsidian** (optional) — only for viewing the graph; the vault is plain Markdown and works without it.
+
+No other dependencies: the scripts are plain bash (no `jq`, node, or python) and use only relative paths. Claude Code Obsidian plugins/skills are **not** required either — if present, Claude uses them for nicer Obsidian syntax; if absent, everything still works.
+
+## Installation. Getting started
+
+1. **Copy `.claude/` into your project root** (next to your `src/`, `package.json`, etc.):
+
+   ```bash
+   cp -r path/to/template/.claude your-project/
+   ```
+
+2. **Already have `.claude/settings.json`?** Don't overwrite it — copy only the `"hooks"` block from this template's `settings.json` into yours (top level, next to your existing keys). If you already have `SessionStart`/`PostToolUse`/`Stop` entries, append these hook objects to the existing arrays.
+
+3. **Load the hooks.** Start a new Claude Code session in the project — hooks are picked up on start. In an already-running session, run `/hooks` once to reload the config.
+
+4. **Verify** (optional). Each script can be tested directly, without Claude:
+
+   ```bash
+   cd your-project
+   echo '{}' | bash .claude/hooks/obsidian-docs-sessionstart.sh          # prints INDEX.md
+   echo '{"tool_input":{"file_path":"src/app.py"}}' | bash .claude/hooks/obsidian-docs-track.sh
+   echo '{}' | bash .claude/hooks/obsidian-docs-stop.sh                  # prints the block JSON
+   ```
+
+   You can also check the hooks are registered via `/hooks` inside Claude Code.
+
+5. **Make the vault yours.** Fill in the stack placeholders in `Backend.md` / `Frontend.md`, adjust sections in `INDEX.md` to your project (see [Managing sections](#managing-sections)).
+
+6. **Open the graph.** In Obsidian: File → Open folder as vault → select `.claude/docs/obsidian/`.
+
+From the next session on: Claude starts with the documentation hub in context, and any turn that changes source files ends with a documentation pass (code map + timeline). If the vault directory is missing, all three hooks silently do nothing — safe to keep in projects that don't use the system.
 
 ## How the update loop works
 
